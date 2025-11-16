@@ -13,7 +13,7 @@ class ApiClient {
     Map<String, String>? headers,
     dynamic body,
   }) async {
-    String? token = await TokenStorage.getToken();
+    String? token = await SecureTokenStorage.getAccessToken();
 
     Future<http.Response> send() async {
       final req = http.Request(method, Uri.parse("$baseUrl$endpoint"));

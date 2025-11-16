@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:event_hub/routes/app.dart';
 import 'package:event_hub/services/dev_config_service.dart';
 import 'package:http/http.dart' as http;
 import '../models/login_response.dart';
@@ -10,8 +11,8 @@ class AuthService {
 
   Future<LoginResponse> login(String email, String password) async {
     final res = await http.post(
-      Uri.parse("$baseUrl/auth/login"),
-      headers: {"Content-Type": "application/json", "Credentials": "include"},
+      Uri.parse("$baseUrl/auth/login?withRefresh=true"),
+      headers: {"Content-Type": "application/json"},
       body: jsonEncode({"email": email, "password": password}),
     );
 
@@ -19,20 +20,24 @@ class AuthService {
   }
 
   Future<String?> refreshToken() async {
-    final res = await http.get(
+    String? refreshToken = await SecureTokenStorage.getRefreshToken();
+
+    final res = await http.post(
       Uri.parse("$baseUrl/auth/refresh"),
-      headers: {"Content-Type": "application/json", "Credentials": "include"},
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"refreshToken": refreshToken}),
     );
 
     if (res.statusCode == 401) {
-      await TokenStorage.removeToken();
+      await SecureTokenStorage.clearAll();
+      router.push('/login');
       return null;
     }
 
     final data = RefreshResponse.fromJson(jsonDecode(res.body));
 
     if (data.success && data.accessToken != null) {
-      await TokenStorage.saveToken(data.accessToken!);
+      await SecureTokenStorage.saveAccessToken(data.accessToken!);
       return data.accessToken;
     }
 

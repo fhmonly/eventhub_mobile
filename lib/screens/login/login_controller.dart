@@ -22,7 +22,8 @@ class LoginController {
     }
 
     if (res.role == "user" && res.accessToken != null) {
-      await TokenStorage.saveToken(res.accessToken!);
+      await SecureTokenStorage.saveAccessToken(res.accessToken!);
+      await SecureTokenStorage.saveRefreshToken(res.refreshToken!);
     }
   }
 }

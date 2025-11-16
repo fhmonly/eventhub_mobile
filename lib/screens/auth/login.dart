@@ -122,7 +122,12 @@ class _LoginPageState extends State<LoginPage> {
 
                             // ROLE USER => SIMPAN TOKEN
                             if (res.role == "user" && res.accessToken != null) {
-                              await TokenStorage.saveToken(res.accessToken!);
+                              await SecureTokenStorage.saveAccessToken(
+                                res.accessToken!,
+                              );
+                              await SecureTokenStorage.saveRefreshToken(
+                                res.refreshToken!,
+                              );
 
                               // Arahkan ke halaman utama
                               context.go("/events");

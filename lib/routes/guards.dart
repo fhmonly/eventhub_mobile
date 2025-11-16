@@ -3,7 +3,7 @@ import '../services/token_storage.dart';
 
 class Guards {
   static Future<bool> isLoggedIn() async {
-    final token = await TokenStorage.getToken();
+    final token = await SecureTokenStorage.getRefreshToken();
     return token != null;
   }
 
