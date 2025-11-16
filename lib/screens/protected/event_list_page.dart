@@ -1,3 +1,4 @@
+import 'package:event_hub/widgets/logout_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../services/api_service.dart';
@@ -12,7 +13,10 @@ class EventListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Events')),
+      appBar: AppBar(
+        title: const Text('Events'),
+        actions: const [LogoutButton()],
+      ),
       body: SafeArea(
         child: FutureBuilder<List<EventModel>>(
           future: ApiService.getEvents(),

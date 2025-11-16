@@ -7,7 +7,7 @@ class DevFloatingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!kDebugMode) return const SizedBox.shrink();
+    // if (!kDebugMode) return const SizedBox.shrink();
 
     return Positioned(
       bottom: 20,
